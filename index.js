@@ -49,7 +49,6 @@ const newEvent = req.body;
 
     })
     
-  
 });
 
 
