@@ -17,15 +17,18 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 client.connect(err => {
     
   const registerCollection = client.db("regCollection").collection("users");
-  
+  const imagesCollection = client.db("regCollection").collection("images");
 
 app.post('/registered', (req,res)=>{
       
-    const password = req.body.password
-    const email = req.body.email
-   console.log(email, password)
+//     const password = req.body.password
+//     const email = req.body.email
+//    console.log(email, password)
+const newEvent = req.body;
+      console.log('adding', newEvent)
+     
    
-   registerCollection.insertOne({email,  password})
+   registerCollection.insertOne(newEvent)
                .then(result => {
                   
                   res.send(result.insertedCount > 0);
@@ -35,6 +38,16 @@ app.post('/registered', (req,res)=>{
    
     })
 
+    app.get('/users',(req,res)=>{
+      console.log('email',req.query.email)
+      registerCollection.find({email: req.query.email})
+      .toArray((err, items) => {
+      console.log(err)
+        res.send(items)
+
+      })
+
+    })
     
   
 });
